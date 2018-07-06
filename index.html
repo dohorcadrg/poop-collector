@@ -1,0 +1,154 @@
+<!--Glory Legaspi, a test with Phaser 3-->
+<!Doctype HTML> 
+<html> 
+<head>
+    <title>Poop Collector</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.1.1/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+        .game-con{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 550,
+        height: 600,
+        physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }},
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        },
+        parent:"game-con",
+    };
+
+    var platforms;
+    var player;
+    var game = new Phaser.Game(config);
+    var coins;
+    var score = 0;
+
+    
+
+    function preload (){
+        //this.load.setBaseURL('http://127.0.0.1:8125');
+        this.load.image('sky', '/assets/background/background.png');
+        this.load.image('ground', '/assets/tiles/grass.png');
+        this.load.image('poop', '/assets/poop/default.png');
+        this.load.image('coin', '/assets/items/coin.png');
+        this.load.audio('coinsound', '/assets/sounds/coin.wav');
+        this.load.audio('bouncesound', '/assets/sounds/bounce.wav');
+        this.load.audio('backgroundmusic', '/assets/sounds/song.mp3');
+
+    }
+
+    function create (){
+        this.sound.add('coinsound');
+        this.sound.add('bouncesound');
+        this.sound.add('backgroundmusic');
+
+        this.sound.play('backgroundmusic', { loop: true });
+        this.add.image(350, 350, 'sky');
+        platforms = this.physics.add.staticGroup();
+        platforms.create(50, 550, 'ground');
+        platforms.create(175, 550, 'ground');
+        platforms.create(275, 550, 'ground');
+        platforms.create(375, 550, 'ground');
+        platforms.create(475, 550, 'ground');
+        platforms.create(575, 550, 'ground');
+        platforms.create(500, 300, 'ground');
+        platforms.create(50, 200, 'ground');
+        platforms.create(175, 200, 'ground');
+
+        player = this.physics.add.sprite(300, 100, 'poop');
+        player.setBounce(1);
+        player.setCollideWorldBounds(true);
+        this.physics.add.collider(player, platforms, playbounce , null, this);
+
+        coins = this.physics.add.group({
+        key: 'coin',
+        repeat: 4,
+        setXY: { x: 50, y: 0, stepX: 100}
+        });
+
+        coins.children.iterate(function (child) {
+        //  Give each star a slightly different bounce
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        });
+
+        this.physics.add.collider(coins, platforms);
+
+        this.physics.add.overlap(player, coins, collectcoin, null, this);
+        scoreText = this.add.text(16, 16, 'Score: 0pc', { fontSize: '25px', fill: '#000' });
+
+        cursors = this.input.keyboard.createCursorKeys();
+
+    }
+
+    function update(){
+         if (cursors.left.isDown)
+    {
+        player.setVelocityX(-200);
+
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(200);
+    }
+    else
+    {
+        player.setVelocityX(0);
+
+        //player.anims.play('turn');
+    }
+
+    if ((cursors.up.isDown || cursors.space.isDown) && player.body.touching.down)
+    {
+        player.setVelocityY(-500);
+
+    }
+    }
+
+    function collectcoin(player, coin)
+    {
+    coin.disableBody(true, true);
+    this.sound.play('coinsound');
+    score += 5;
+    scoreText.setText('Score: ' + score + "pc");
+
+    if (coins.countActive(true) === 0)
+    {
+        //  A new batch of stars to collect
+
+        coins.children.iterate(function (child) {
+
+            child.enableBody(true, child.x, 0, true, true);
+
+        });
+    }
+    }
+    function playbounce(){
+        if (player.body.touching.down){
+            this.sound.play('bouncesound');
+            player.setVelocityY(-500);
+        }
+    }
+
+</script>
+<div id="game-con"></div>
+<br><a href="credits.html">Credits</a>
+</body>
+</html>
