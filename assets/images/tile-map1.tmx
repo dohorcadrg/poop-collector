@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="2017.07.26" orientation="orthogonal" renderorder="right-down" width="15" height="20" tilewidth="100" tileheight="100" nextobjectid="1">
+ <tileset firstgid="1" name="grass-sheet" tilewidth="100" tileheight="100" tilecount="36" columns="6">
+  <properties>
+   <property name="collides" type="bool" value="true"/>
+  </properties>
+  <image source="grass-sheet.png" width="600" height="600"/>
+  <tile id="15">
+   <objectgroup draworder="index">
+    <object id="1" x="101" y="2">
+     <polygon points="0,0 -102,98 0,100"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="19">
+   <objectgroup draworder="index">
+    <object id="1" x="2" y="2">
+     <polygon points="0,0 99,98 -5,97"/>
+    </object>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <layer name="grass" width="15" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,11,14,0,0,0,
+0,10,0,11,12,14,0,0,0,0,0,0,11,14,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,
+0,0,0,0,0,11,14,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,11,14,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,11,12,0,0,0,0,0,0,0,11,
+0,0,0,0,0,0,0,0,0,0,11,13,14,0,0,
+0,0,11,14,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,13,14,0,0,0,31,
+24,27,27,27,27,27,31,0,0,0,0,0,0,27,8,
+7,4,4,4,4,4,8,13,13,13,13,13,6,3,9
+</data>
+ </layer>
+</map>
