@@ -1,6 +1,7 @@
     var platforms;
     var player;
     var coins;
+    var totalcoins = 0;
     var score = 0;
     var grassLayer;
     var health;
@@ -10,11 +11,19 @@
     var isLoaded = null;
     var reStartgame = null;
     var NowStartGame = null;
+    var NowShowCredits = null;
+    var returntoMenu = null;
+    var screenCenterX = 0;
+    var screenCenterY = 0;
 
 //scenes
 let splashscreen = new Phaser.Scene('splashscreen');
 
 let titlescreen = new Phaser.Scene('titlescreen');
+
+let creditsscreen = new Phaser.Scene('creditsscreen');
+
+let shoppingscreen = new Phaser.Scene('shoppingscreen');
 
 let maingame = new Phaser.Scene('maingame');
 
@@ -22,16 +31,18 @@ let gameover = new Phaser.Scene('gameover');
 
 //splashscreen 
     splashscreen.preload = function(){
+            screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
+            screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
             var progressBar = this.add.graphics();
             var progressBox = this.add.graphics();
             progressBox.fillStyle(0x222222, 0.8);
-            progressBox.fillRect(240, 270, 320, 50);
-            
-            var width = this.cameras.main.width;
-            var height = this.cameras.main.height;
+            progressBox.fillRect(screenCenterX, screenCenterY, 320, 50);
+
+            var width = window.innerWidth;
+            var height = window.innerHeight;
             var loadingText = this.make.text({
-                x: width / 2,
-                y: height / 2 - 50,
+                x: screenCenterX,
+                y: screenCenterY,
                 text: 'Loading...',
                 style: {
                     font: '20px monospace',
@@ -41,8 +52,8 @@ let gameover = new Phaser.Scene('gameover');
             loadingText.setOrigin(0.5, 0.5);
             
             var percentText = this.make.text({
-                x: width / 2,
-                y: height / 2 - 5,
+                x: screenCenterX,
+                y: screenCenterY,
                 text: '0%',
                 style: {
                     font: '18px monospace',
@@ -52,8 +63,8 @@ let gameover = new Phaser.Scene('gameover');
             percentText.setOrigin(0.5, 0.5);
             
             var assetText = this.make.text({
-                x: width / 2,
-                y: height / 2 + 50,
+                x: screenCenterX,
+                y: screenCenterY,
                 text: '',
                 style: {
                     font: '18px monospace',
@@ -66,7 +77,7 @@ let gameover = new Phaser.Scene('gameover');
                 percentText.setText(parseInt(value * 100) + '%');
                 progressBar.clear();
                 progressBar.fillStyle(0xffffff, 1);
-                progressBar.fillRect(250, 280, 300 * value, 30);
+                progressBar.fillRect(screenCenterX, screenCenterY, 300 * value, 30);
             });
             
             this.load.on('fileprogress', function (file) {
@@ -107,12 +118,24 @@ let gameover = new Phaser.Scene('gameover');
 //titlescreen
 
     titlescreen.create = function(){
-        this.add.image(400, 200, 'mainlogo');
-        startText = this.add.text(200, 450, 'click to start game', { fontSize: '30px', fill: '#ffffff' });
-        this.input.on('pointerdown', function (pointer)
+        
+        this.add.image(screenCenterX, screenCenterY - 100, 'mainlogo').setOrigin(0.5);
+        let startButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
+        let creditsButton = this.add.circle(screenCenterX + (screenCenterX - 55), (screenCenterY / 5), 50, 0xffaaaa);
+        startButton.setInteractive();
+        creditsButton.setInteractive();
+        this.add.text(screenCenterX, screenCenterY + 200, 'Start game', { fontSize: '30px', fill: '#000' }).setOrigin(0.5);
+        this.add.text(screenCenterX + (screenCenterX - 55), screenCenterY / 5, '?', { fontSize: '50px', fill: '#000' }).setOrigin(0.5);
+        startButton.on('pointerdown', function (pointer)
         {
             NowStartGame = true;
         });
+        creditsButton.on('pointerdown', function (pointer)
+        {
+            NowShowCredits = true;
+        });
+
+
 
     }
 
@@ -120,6 +143,11 @@ let gameover = new Phaser.Scene('gameover');
         if (NowStartGame) {
             NowStartGame = false;
             this.scene.start("maingame");
+        }
+        if (NowShowCredits) {
+            NowShowCredits = false;
+            this.scene.start("creditsscreen");
+
         }
     }
 
@@ -142,9 +170,9 @@ let gameover = new Phaser.Scene('gameover');
         this.backgroundmusic.play({loop:true});
 
         //this.sound.play('backgroundmusic', { loop: true });
-        var leftarrow = this.add.image(100, 550, 'leftArrow').setInteractive();
+        var leftarrow = this.add.image(screenCenterX - (screenCenterX / 1.5), screenCenterY + (screenCenterY / 1.5), 'leftArrow').setInteractive();
         leftarrow.setScrollFactor(0);
-        var rightarrow = this.add.image(700, 550, 'rightArrow').setInteractive();
+        var rightarrow = this.add.image(screenCenterX + (screenCenterX / 1.5), screenCenterY + (screenCenterY / 1.5), 'rightArrow').setInteractive();
         rightarrow.setScrollFactor(0);
 
         leftarrow.on('pointerdown', function (pointer)
@@ -268,6 +296,7 @@ let gameover = new Phaser.Scene('gameover');
         this.physics.pause();
         this.backgroundmusic.stop();
         gameOver = true;
+        totalcoins += score;
         this.scene.start('gameover');
 
     }
@@ -320,14 +349,26 @@ let gameover = new Phaser.Scene('gameover');
 
     gameover.create = function(){
 
-        endText = this.add.text(150, 200, 'Game Over', { fontSize: '100px', fill: '#ffffff' });
-        endText.setScrollFactor(0);
-        endScore = this.add.text(150, 300, '0', { fontSize: '40px', fill: '#ffffff' });;
+        endText = this.add.text(screenCenterX, screenCenterY - (screenCenterY / 2), 'Game Over', { fontSize: '30px', fill: '#ffffff' }).setOrigin(0.5);
+        endScore = this.add.text(screenCenterX, screenCenterY, '0', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         endScore.setText("Your Final Score: " + score + "pc");
-        continueText = this.add.text(200, 450, 'click to continue', { fontSize: '30px', fill: '#ffffff' });
-        this.input.on('pointerdown', function (pointer)
+        endTotalMoney = this.add.text(screenCenterX, screenCenterY - (screenCenterY / 4), '0', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        endTotalMoney.setText("Total Coins Collected: " + totalcoins + "pc");
+        let continueButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
+        continueButton.setInteractive();
+        continueText = this.add.text(screenCenterX, screenCenterY + 200, 'Restart Game', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+       let creditsButton = this.add.circle(screenCenterX + (screenCenterX - 55), (screenCenterY / 5), 50, 0xffaaaa);
+       creditsButton.setInteractive();
+       this.add.text(screenCenterX + (screenCenterX - 55), screenCenterY / 5, '?', { fontSize: '50px', fill: '#000' }).setOrigin(0.5);
+        
+
+        continueButton.on('pointerdown', function (pointer)
         {
             reStartgame = true;
+        });
+        creditsButton.on('pointerdown', function (pointer)
+        {
+            NowShowCredits = true;
         });
 
     }
@@ -335,22 +376,56 @@ let gameover = new Phaser.Scene('gameover');
     gameover.update = function(){
         if (reStartgame) {
             reStartgame = false;
+            score = 0;
             this.scene.start("maingame");
+        }
+        if (NowShowCredits) {
+            NowShowCredits = false;
+            score = 0;
+            this.scene.start("creditsscreen");
+
         }
     }
 
+    creditsscreen.create = function(){
+        this.add.text(screenCenterX, screenCenterY + (screenCenterY/2), 'Click to return to menu', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) - 80, 'Use left & right arrow Keys or', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) - 60, 'Tap on Screen Arrows to move', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) - 20, 'Credits', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2), 'Background Music By:', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 20, 'TinyWorlds at Open Game Art', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 40, 'Coin And Bounce SX By:', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 60, 'NoiseForFun.com', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 80, 'Tile Set and Background by:', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 100, 'Bayat games platformer asset set', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 120, 'Powered by Phaser 3', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 140, 'Developed by Glory Legaspi', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.input.on('pointerdown', function (pointer)
+        {
+            returntoMenu = true;
+        });
+    }
+
+    creditsscreen.update = function(){
+        if (returntoMenu) {
+            returntoMenu = false;
+            this.scene.start("titlescreen");
+        }
+    }
 
     var config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        scale: {
+        mode: Phaser.Scale.RESIZE,
+        },
+        backgroundColor: 0xdda0dd,
         physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
             debug: false
         }},
-        scene: [splashscreen, titlescreen, maingame, gameover],
+        scene: [splashscreen, titlescreen, maingame, gameover, creditsscreen, shoppingscreen],
         parent:"game-con",
     };
 

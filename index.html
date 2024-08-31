@@ -4,22 +4,29 @@
 <head>
     <title>Poop Collector</title>
     <!--<script src="//cdn.jsdelivr.net/npm/phaser@3.1.1/dist/phaser.js"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
+   <meta name="viewport" content="width = device-width, initial-scale =
+1.0, maximum-scale = 1.0, minimum-scale = 1.0, user-scalable = 0,
+minimal-ui=1.0" />
+<script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <style type="text/css">
         body{
-            margin: auto; text-align: center;
-
-        }
-        canvas{
-            border: 2px solid white;
-            border-radius: 5%;
-        }
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    }
+    canvas{
+    display:block;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    }
     </style>
 </head>
 <body>
 <script type="text/javascript" src="maingame.js"></script>
-<div id="game-con" class="container"></div>
-<a href="credits.html">Credits</a>
-</body>
+<div id="game-con" class="container">
+</div></body>
 </html>
