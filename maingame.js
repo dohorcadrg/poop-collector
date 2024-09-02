@@ -19,6 +19,37 @@
     var screenCenterX = 0;
     var screenCenterY = 0;
     var poopColor = "default";
+    const gameState = {};
+    let poopColors = [
+    {
+        color: "default",
+        unlocked: true,
+    },
+    {
+        color: "yellow",
+        unlocked: false,
+    },
+    {
+        color: "red",
+        unlocked: false,
+    },
+    {
+        color: "blue",
+        unlocked: false,
+    },
+    {
+        color: "orange",
+        unlocked: false,
+    },
+    {
+        color: "green",
+        unlocked: false,
+    },
+    {
+        color: "purple",
+        unlocked: false,
+    },
+    ];
 
 //scenes
 let splashscreen = new Phaser.Scene('splashscreen');
@@ -107,6 +138,10 @@ let gameover = new Phaser.Scene('gameover');
         this.load.spritesheet('redpoop', 'assets/poop/spritesheetred.png', { frameWidth: 91, frameHeight: 84 });
         this.load.spritesheet('yellowpoop', 'assets/poop/spritesheetyellow.png', { frameWidth: 91, frameHeight: 84 });
         this.load.spritesheet('bluepoop', 'assets/poop/spritesheetblue.png', { frameWidth: 91, frameHeight: 84 });
+        this.load.spritesheet('orangepoop', 'assets/poop/spritesheetorange.png', { frameWidth: 91, frameHeight: 84 });
+        this.load.spritesheet('greenpoop', 'assets/poop/spritesheetgreen.png', { frameWidth: 91, frameHeight: 84 });
+        this.load.spritesheet('purplepoop', 'assets/poop/spritesheetpurple.png', { frameWidth: 91, frameHeight: 84 });
+        this.load.spritesheet('unlockedpoop', 'assets/poop/unlockedpoop.png', { frameWidth: 91, frameHeight: 84 });
         this.load.image('soap', 'assets/images/soap.png');
         this.load.image('coin', 'assets/items/coin.png');
         this.load.audio('coinsound', 'assets/sounds/coin.wav');
@@ -137,60 +172,7 @@ let gameover = new Phaser.Scene('gameover');
         frames: [ { key: 'defaultpoop', frame: 0 } ],
         frameRate: 20
     });
-        //red
-        this.anims.create({
-        key: 'redleft',
-        frames: [ { key: 'redpoop', frame: 2 } ],
-        frameRate: 20
-        });
 
-        this.anims.create({
-        key: 'redright',
-        frames: [ { key: 'redpoop', frame: 1 } ],
-        frameRate: 20
-        });
-
-        this.anims.create({
-        key: 'redstill',
-        frames: [ { key: 'redpoop', frame: 0 } ],
-        frameRate: 20
-    });
-        //blue
-        this.anims.create({
-        key: 'blueleft',
-        frames: [ { key: 'bluepoop', frame: 2 } ],
-        frameRate: 20
-        });
-
-        this.anims.create({
-        key: 'blueright',
-        frames: [ { key: 'bluepoop', frame: 1 } ],
-        frameRate: 20
-        });
-
-        this.anims.create({
-        key: 'bluestill',
-        frames: [ { key: 'bluepoop', frame: 0 } ],
-        frameRate: 20
-    });
-        //yellow
-        this.anims.create({
-        key: 'yellowleft',
-        frames: [ { key: 'yellowpoop', frame: 2 } ],
-        frameRate: 20
-        });
-
-        this.anims.create({
-        key: 'yellowright',
-        frames: [ { key: 'yellowpoop', frame: 1 } ],
-        frameRate: 20
-        });
-
-        this.anims.create({
-        key: 'yellowstill',
-        frames: [ { key: 'yellowpoop', frame: 0 } ],
-        frameRate: 20
-    });
     }
 
 
@@ -228,13 +210,17 @@ let gameover = new Phaser.Scene('gameover');
         let shoppingButton = this.add.rectangle(100, (screenCenterY / 10), 150, 50, 0xaaffaa);
         this.add.text(100, screenCenterY / 10, 'Spend Coins', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
         shoppingButton.setInteractive();
-        shoppingButton.on('pointerdown', function (pointer)
-            {
+        shoppingButton.on('pointerdown', function (pointer){
                 yesShowShopping = true;
             });
-
         }
-        
+
+        let closetButton = this.add.rectangle(100, (screenCenterY + screenCenterY - 50), 150, 50, 0xaaffaa);
+        this.add.text(100, (screenCenterY + screenCenterY - 50), 'Change Color', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        closetButton.setInteractive();
+        closetButton.on('pointerdown', function (pointer){
+                yesShowCloset = true;
+        });
 
 
 
@@ -256,7 +242,11 @@ let gameover = new Phaser.Scene('gameover');
             this.sound.play("uipopsound");
             yesShowShopping = false;
             this.scene.start("shoppingscreen");
-
+        }
+        if (yesShowCloset) {
+            this.sound.play("uipopsound");
+            yesShowCloset = false;
+            this.scene.start("closetscreen");
         }
     }
 
@@ -384,13 +374,22 @@ let gameover = new Phaser.Scene('gameover');
                     player.anims.play('defaultleft');
                 }
                 else if (poopColor === "red") {
-                    player.anims.play('redleft');
+                    player.setTexture("redpoop",[2]);
                 }
                 else if (poopColor === "yellow") {
-                    player.anims.play('yellowleft');
+                    player.setTexture("yellowpoop",[2]);
                 }
                 else if (poopColor === "blue") {
-                    player.anims.play('blueleft');
+                    player.setTexture("bluepoop",[2]);
+                }
+                else if (poopColor === "orange") {
+                    player.setTexture("orangepoop",[2]);
+                }
+                else if (poopColor === "green") {
+                    player.setTexture("greenpoop",[2]);
+                }
+                else if (poopColor === "purple") {
+                    player.setTexture("purplepoop",[2]);
                 }
                 else{
                     player.anims.play('defaultleft');
@@ -405,13 +404,22 @@ let gameover = new Phaser.Scene('gameover');
                     player.anims.play('defaultright');
                 }
                 else if (poopColor === "red") {
-                    player.anims.play('redright');
+                    player.setTexture("redpoop",[1]);
                 }
                 else if (poopColor === "yellow") {
-                    player.anims.play('yellowright');
+                    player.setTexture("yellowpoop",[1]);
                 }
                 else if (poopColor === "blue") {
-                    player.anims.play('blueright');
+                    player.setTexture("bluepoop",[1]);
+                }
+                else if (poopColor === "orange") {
+                    player.setTexture("orangepoop",[1]);
+                }
+                else if (poopColor === "green") {
+                    player.setTexture("greenpoop",[1]);
+                }
+                else if (poopColor === "purple") {
+                    player.setTexture("purplepoop",[1]);
                 }
                 else{
                     player.anims.play('defaultright');
@@ -424,13 +432,22 @@ let gameover = new Phaser.Scene('gameover');
                 player.anims.play('defaultstill');
                 }
                 else if (poopColor === "red") {
-                     player.anims.play('redstill');
+                   player.setTexture("redpoop",[0]);
                 }
                 else if (poopColor === "yellow") {
-                    player.anims.play('yellowstill');
+                   player.setTexture("yellowpoop",[0]);
                 }
                 else if (poopColor === "blue") {
-                    player.anims.play('bluestill');
+                  player.setTexture("bluepoop",[0]);
+                }
+                else if (poopColor === "orange") {
+                    player.setTexture("orangepoop",[0]);
+                }
+                else if (poopColor === "green") {
+                    player.setTexture("greenpoop",[0]);
+                }
+                else if (poopColor === "purple") {
+                    player.setTexture("purplepoop",[0]);
                 }
                 else{
                     player.anims.play('defaultstill');
@@ -535,6 +552,12 @@ let gameover = new Phaser.Scene('gameover');
 
             yesShowShopping = true;
         });
+        let closetButton = this.add.rectangle(100, (screenCenterY + screenCenterY - 50), 150, 50, 0xaaffaa);
+        this.add.text(100, (screenCenterY + screenCenterY - 50), 'Change Color', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        closetButton.setInteractive();
+        closetButton.on('pointerdown', function (pointer){
+                yesShowCloset = true;
+        });
 
     }
 
@@ -558,80 +581,89 @@ let gameover = new Phaser.Scene('gameover');
             score = 0;
             this.scene.start("shoppingscreen");
         }
+        if (yesShowCloset) {
+            this.sound.play("uipopsound");
+            yesShowCloset = false;
+            score = 0;
+            this.scene.start("closetscreen");
+        }
     }
 
 
     shoppingscreen.create = function(){
 
-        let popSound = this.sound.add('uipopsound');
+        gameState.popSound = this.sound.add('uipopsound');
 
         endText = this.add.text(screenCenterX, 30, 'Unlock Poop', { fontSize: '30px', fill: '#ffffff' }).setOrigin(0.5);
-        endTotalMoney = this.add.text(screenCenterX, 55, '0', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
-        endTotalMoney.setText("Total Coins Collected: " + totalcoins + "pc");
+        gameState.endTotalMoney = this.add.text(screenCenterX, 55, '0', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        gameState.endTotalMoney.setText("Total Coins Collected: " + totalcoins + "pc");
 
         //temp capslue machine
-        let easycapsulemachine = this.add.rectangle(screenCenterX, screenCenterY - screenCenterY / 4, 150, 200, 0xaaffaa);
-        let pooppic = this.add.image(screenCenterX, screenCenterY, 'defaultpoop');
+        gameState.easycapsulemachine = this.add.rectangle(screenCenterX, screenCenterY - screenCenterY / 4, 150, 200, 0xaaffaa);
+        gameState.pooppic = this.add.image(screenCenterX, screenCenterY, 'defaultpoop');
         if (poopColor === "red") {
-            pooppic.setTexture("redpoop",[0]);
+            gameState.pooppic.setTexture("redpoop",[0]);
         }
         else if (poopColor === "yellow") {
-            pooppic.setTexture("yellowpoop",[0]);
+            gameState.pooppic.setTexture("yellowpoop",[0]);
         }
         else if (poopColor === "blue") {
-            pooppic.setTexture("bluepoop",[0]);
+            gameState.pooppic.setTexture("bluepoop",[0]);
         }
-        let easycapsulemachinetext1 = this.add.text(screenCenterX, screenCenterY - screenCenterY / 4, 'Buy capsule', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
-        let easycapsulemachinetext2 = this.add.text(screenCenterX, screenCenterY - screenCenterY / 4 + 25, '(50 coins)', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
-        easycapsulemachine.setInteractive();
-        easycapsulemachine.on('pointerdown', function (pointer)
+        else if (poopColor === "orange") {
+            gameState.pooppic.setTexture("orangepoop",[0]);
+        }
+        else if (poopColor === "green") {
+            gameState.pooppic.setTexture("greenpoop",[0]);
+        }
+        else if (poopColor === "purple") {
+            gameState.pooppic.setTexture("purplepoop",[0]);
+        }
+        gameState.easycapsulemachinetext1 = this.add.text(screenCenterX, screenCenterY - screenCenterY / 4, 'Buy capsule', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        gameState.easycapsulemachinetext2 = this.add.text(screenCenterX, screenCenterY - screenCenterY / 4 + 25, '(50 coins)', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        gameState.easycapsulemachine.setInteractive();
+        gameState.easycapsulemachine.on('pointerdown', function (pointer)
         {
-            
             yesbuyEasyCapsule = true;
+            buyEasyCapsule();
             if (totalcoins >= 50) {
-                popSound.play();
-                totalcoins = totalcoins - 50;
-                endTotalMoney.setText("Total Coins Collected: " + totalcoins + "pc");
-                easycapsulemachine.destroy();
-                easycapsulemachinetext2.destroy();
-                var pickNum1 = Phaser.Math.Between(1, 10);
-                var pickNum2 = Phaser.Math.Between(1, 10);
-                var pickNum3 = Phaser.Math.Between(1, 10);
-                var whichResultNum = Math.min(pickNum1, pickNum2, pickNum3);
-
-                if (whichResultNum <= 5) {
-                    poopColor = "yellow";
-                    pooppic.setTexture("yellowpoop",[0]);
-                    easycapsulemachinetext1.setText("You unlocked Yellow (common)" + whichResultNum);
-                }
-                else if (whichResultNum <= 8) {
-                    poopColor = "red";
-                    pooppic.setTexture("redpoop",[0]);
-                    easycapsulemachinetext1.setText("You unlocked Red (uncommon)" + whichResultNum);
-                }
-                else if (whichResultNum <= 10) {
-                    poopColor = "blue";
-                    pooppic.setTexture("bluepoop",[0]);
-                    easycapsulemachinetext1.setText("You unlocked Blue (rare)" + whichResultNum);
-                }
-
-
+                gameState.buyAgainButton.visible = true;
+                gameState.buyAgainText.visible = true;
             }
             
         });
 
-
-
-
         let returntoMenuButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
         returntoMenuButton.setInteractive();
         returntoMenuText = this.add.text(screenCenterX, screenCenterY + 200, 'Return to Menu', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        gameState.buyAgainButton = this.add.rectangle(screenCenterX, 100, 200, 50, 0xaaffaa);
+        gameState.buyAgainButton.setInteractive();
+        gameState.buyAgainText = this.add.text(screenCenterX, 100, 'Buy Another', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+       
+
         returntoMenuButton.on('pointerdown', function (pointer)
         {
 
             returntoMenu = true;
         });
+        gameState.buyAgainButton.visible = false;
+        gameState.buyAgainText.visible = false;
 
+        gameState.buyAgainButton.on('pointerdown', function (pointer)
+        {
+            yesbuyEasyCapsule = true;
+            buyEasyCapsule();
+            if (totalcoins >= 50) {
+                gameState.buyAgainButton.visible = true;
+                gameState.buyAgainText.visible = true;
+            }
+            else{
+                gameState.buyAgainButton.visible = false;
+                gameState.buyAgainText.visible = false;
+            
+            }
+            
+        });
 
     }
 
@@ -646,14 +678,311 @@ let gameover = new Phaser.Scene('gameover');
         }
     }
 
+    function buyEasyCapsule(){
+        if (totalcoins >= 50) {
+                gameState.popSound.play();
+                totalcoins = totalcoins - 50;
+                gameState.endTotalMoney.setText("Total Coins Collected: " + totalcoins + "pc");
+                gameState.easycapsulemachine.destroy();
+                gameState.easycapsulemachinetext2.destroy();
+                var pickNum1 = Phaser.Math.Between(1, 10);
+                var pickNum2 = Phaser.Math.Between(1, 10);
+                var pickNum3 = Phaser.Math.Between(1, 10);
+                var whichResultNum = Math.min(pickNum1, pickNum2, pickNum3);
+                var whichNumSet = Phaser.Math.Between(1, 3);
 
+                if (whichResultNum <= 5) {
+                    if (whichNumSet === 3) {
+                        poopColor = "yellow";
+                        if (poopColors[1].unlocked) {
+                            //totalcoins = totalcoins + 25;
+                            console.log("Yellow already unlocked");
+                        }
+                        else{
+                            poopColors[1].unlocked = true;
+                            console.log("Yellow unlocked");
+                        }
+                        gameState.pooppic.setTexture("yellowpoop",[0]);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Yellow (common)");
+                    }
+                    else if (whichNumSet === 2){
+                        poopColor = "red";
+                        if (poopColors[2].unlocked) {
+                            //totalcoins = totalcoins + 25;
+                        }
+                        else{
+                            poopColors[2].unlocked = true;
+                        }
+                        gameState.pooppic.setTexture("redpoop",[0]);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Red (common)");
+                    }
+                    else{
+                        poopColor = "blue";
+                        if (poopColors[3].unlocked) {
+                            //totalcoins = totalcoins + 25;
+                        }
+                        else{
+                            poopColors[3].unlocked = true;
+                        }
+                        gameState.pooppic.setTexture("bluepoop",[0]);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Blue (common)");
+                    }
+                    
+                }
+                else if (whichResultNum <= 8) {
+                    if (whichNumSet === 3) {
+                        poopColor = "orange";
+                        if (poopColors[4].unlocked) {
+                            //totalcoins = totalcoins + 25;
+                        }
+                        else{
+                            poopColors[4].unlocked = true;
+                        }
+                        gameState.pooppic.setTexture("orangepoop",[0]);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Orange (uncommon)");
+                    }
+                    else if (whichNumSet === 2) {
+                        poopColor = "green";
+                        if (poopColors[5].unlocked) {
+                            //totalcoins = totalcoins + 25;
+                        }
+                        else{
+                            poopColors[5].unlocked = true;
+                        }
+                        gameState.pooppic.setTexture("greenpoop",[0]);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Green (uncommon)");
+                    
+                    }
+                    else {
+                        poopColor = "purple";
+                        if (poopColors[6].unlocked) {
+                            //totalcoins = totalcoins + 25;
+                        }
+                        else{
+                            poopColors[6].unlocked = true;
+                        }
+                        gameState.pooppic.setTexture("purplepoop",[0]);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Purple (uncommon)" + whichResultNum);
+                    
+                    }
+                    
+                }
+                else if (whichResultNum <= 10) {
+                    poopColor = "blue";
+                    gameState.pooppic.setTexture("bluepoop",[0]);
+                    gameState.easycapsulemachinetext1.setText("You unlocked Blue (rare)" + whichResultNum);
+                }
+            }
+    }
+
+
+    closetscreen.create = function(){
+        gameState.gobackwards = false;
+        gameState.displayedPoop = [];
+        var poopnum = 0;
+        closetTitle = this.add.text(screenCenterX, 80, 'Change Colors', { fontSize: '30px', fill: '#ffffff' }).setOrigin(0.5);
+        gameState.closetDescript = this.add.text(screenCenterX, 105, 'Click poop to select', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+
+
+        gameState.poopPreImage = this.physics.add.sprite(0, screenCenterY - screenCenterY / 2, 'defaultpoop');
+        gameState.poopPreImage.setBounce(1);
+        gameState.poopPreImage.setCollideWorldBounds(true);
+
+        gameState.poopPreImage.setTexture("defaultpoop",[1]);
+
+        var poopcount = 0;
+        var rowstart = 0;
+        var poopnum = 100;
+
+/*        
+
+        for (var i = 0; i < poopColors.length; i++) {
+
+
+            if (poopColors[i].unlocked) {
+                poopnum = 100 + i * 100;
+                    gameState.displayedPoop[i] = this.add.image(poopnum, screenCenterY + rowstart, poopColors[i].color + "poop");
+                    console.log(i + "Display" + poopColors[i].color + " at " + poopnum + "x, " + screenCenterY + "y");
+                    gameState.displayedPoop[i].setInteractive();
+
+
+            }
+            else{
+
+                    if (i % 3 == 0) {
+                        console.log("Start a new row");
+                    }
+                    else{
+                        
+                    }
+                    poopnum = 100 + i * 100;
+                    gameState.displayedPoop[i] = this.add.image(poopnum, screenCenterY + rowstart, "unlockedpoop");
+                    console.log(i + "Display" + poopColors[i].color + " as blank at " + poopnum + "x, " + screenCenterY + "y");
+
+                    
+
+
+                }
+        }
+
+*/
+    if (poopColors[0].unlocked) {
+        gameState.displayedPoop[0] = this.add.image(100, screenCenterY, poopColors[0].color + "poop");
+        gameState.displayedPoop[0].setInteractive();
+    }else{
+        gameState.displayedPoop[0] = this.add.image(100, screenCenterY, "unlockedpoop");
+    }
+
+    if (poopColors[1].unlocked) {
+        gameState.displayedPoop[1] = this.add.image(200, screenCenterY, poopColors[1].color + "poop");
+        gameState.displayedPoop[1].setInteractive();
+    }else{
+        gameState.displayedPoop[1] = this.add.image(200, screenCenterY, "unlockedpoop");
+    }
+    
+    if (poopColors[2].unlocked) {
+        gameState.displayedPoop[2] = this.add.image(300, screenCenterY, poopColors[2].color + "poop");
+        gameState.displayedPoop[2].setInteractive();
+    }else{
+        gameState.displayedPoop[2] = this.add.image(300, screenCenterY, "unlockedpoop");
+    }
+    if (poopColors[3].unlocked) {
+    gameState.displayedPoop[3] = this.add.image(100, screenCenterY + 100, poopColors[3].color + "poop");
+    gameState.displayedPoop[3].setInteractive();
+    }else{
+        gameState.displayedPoop[3] = this.add.image(100, screenCenterY + 100, "unlockedpoop");
+    }
+
+    if (poopColors[4].unlocked) {
+    gameState.displayedPoop[4] = this.add.image(200, screenCenterY + 100, poopColors[4].color + "poop");
+    gameState.displayedPoop[4].setInteractive();
+    }else{
+        gameState.displayedPoop[4] = this.add.image(200, screenCenterY + 100, "unlockedpoop");
+    }
+
+    if (poopColors[5].unlocked) {
+    gameState.displayedPoop[5] = this.add.image(300, screenCenterY + 100, poopColors[5].color + "poop");
+    gameState.displayedPoop[5].setInteractive();
+    }else{
+        gameState.displayedPoop[5] = this.add.image(300, screenCenterY + 100, "unlockedpoop");
+    }
+
+    if (poopColors[5].unlocked) {
+    gameState.displayedPoop[6] = this.add.image(100, screenCenterY + 200, poopColors[6].color + "poop");
+    gameState.displayedPoop[6].setInteractive();
+    }else{
+        gameState.displayedPoop[6] = this.add.image(100, screenCenterY + 200, "unlockedpoop");
+    }
+                    
+                    
+
+
+        gameState.displayedPoop[0].on('pointerdown', function (pointer){
+                    poopColor = "default";
+                    gameState.closetDescript.setText("You changed color to default");
+        });
+        gameState.displayedPoop[1].on('pointerdown', function (pointer){
+                    poopColor = "yellow";
+                    gameState.closetDescript.setText("You changed color to yellow");
+        });
+        gameState.displayedPoop[2].on('pointerdown', function (pointer){
+                    poopColor = "red";
+                    gameState.closetDescript.setText("You changed color to red");
+        });
+        gameState.displayedPoop[3].on('pointerdown', function (pointer){
+                    poopColor = "blue";
+                    gameState.closetDescript.setText("You changed color to blue");
+        });
+        gameState.displayedPoop[4].on('pointerdown', function (pointer){
+                    poopColor = "orange";
+                    gameState.closetDescript.setText("You changed color to orange");
+        });
+        gameState.displayedPoop[5].on('pointerdown', function (pointer){
+                    poopColor = "green";
+                    gameState.closetDescript.setText("You changed color to green");
+        });
+        gameState.displayedPoop[6].on('pointerdown', function (pointer){
+                    poopColor = "purple";
+                    gameState.closetDescript.setText("You changed color to purple");
+        });
+
+
+
+        let returntoMenuButton = this.add.rectangle(100, (screenCenterY / 10), 150, 50, 0xaaffaa);
+        returntoMenuButton.setInteractive();
+        returntoMenuText = this.add.text(100, (screenCenterY / 10), 'Return to Menu', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        returntoMenuButton.on('pointerdown', function (pointer)
+        {
+
+            returntoMenu = true;
+        });
+    }
+
+    closetscreen.update = function(){
+        
+        if (returntoMenu) {
+            returntoMenu = false;
+            this.sound.play("uipopsound");
+            this.scene.start("titlescreen");
+        }
+        if (gameState.poopPreImage.x >= (screenCenterX + screenCenterX - 100) && gameState.gobackwards == false) {
+            gameState.gobackwards = true;
+        }
+
+        else if (gameState.gobackwards == true && gameState.poopPreImage.x <= 100) {
+            gameState.gobackwards = false;
+            
+            
+        }
+        else if (gameState.gobackwards) {
+            gameState.poopPreImage.x -= 1;
+            if (poopColor === "default") {
+                gameState.poopPreImage.setTexture("defaultpoop",[2]);
+            } else if (poopColor === "yellow") {
+                gameState.poopPreImage.setTexture("yellowpoop",[2]);
+            } else if (poopColor === "red") {
+                gameState.poopPreImage.setTexture("redpoop",[2]);
+            } else if (poopColor === "blue") {
+                gameState.poopPreImage.setTexture("bluepoop",[2]);
+            } else if (poopColor === "orange") {
+                gameState.poopPreImage.setTexture("orangepoop",[2]);
+            } else if (poopColor === "green") {
+                gameState.poopPreImage.setTexture("greenpoop",[2]);
+            } else if (poopColor === "purple") {
+                gameState.poopPreImage.setTexture("purplepoop",[2]);
+            }
+            else{
+                gameState.poopPreImage.setTexture("defaultpoop",[2]);
+            }
+        }
+        else{
+            gameState.poopPreImage.x += 1;
+            if (poopColor === "default") {
+                gameState.poopPreImage.setTexture("defaultpoop",[1]);
+            } else if (poopColor === "yellow") {
+                gameState.poopPreImage.setTexture("yellowpoop",[1]);
+            } else if (poopColor === "red") {
+                gameState.poopPreImage.setTexture("redpoop",[1]);
+            } else if (poopColor === "blue") {
+                gameState.poopPreImage.setTexture("bluepoop",[1]);
+            } else if (poopColor === "orange") {
+                gameState.poopPreImage.setTexture("orangepoop",[1]);
+            } else if (poopColor === "green") {
+                gameState.poopPreImage.setTexture("greenpoop",[1]);
+            } else if (poopColor === "purple") {
+                gameState.poopPreImage.setTexture("purplepoop",[1]);
+            }
+            else{
+                gameState.poopPreImage.setTexture("defaultpoop",[2]);
+            }
+        }
+
+        
+    }
 
 
 
     creditsscreen.create = function(){
-        
-        poopColor = "red";
-
         this.add.text(screenCenterX, screenCenterY + (screenCenterY/2), 'Click to return to menu', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) - 100, 'Collect coins, avoid soap', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) - 80, 'Use left & right arrow Keys or', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
