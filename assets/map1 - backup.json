@@ -1,0 +1,143 @@
+{ "compressionlevel":-1,
+ "height":20,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 14, 0, 0, 0,
+            0, 10, 0, 11, 12, 14, 0, 0, 0, 0, 0, 0, 11, 14, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
+            0, 0, 0, 0, 0, 11, 14, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0,
+            26, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 14, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 26, 26, 12, 0, 0, 0, 0, 0, 0, 0, 11,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 13, 14, 0, 0,
+            0, 0, 11, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 14, 0, 0, 0, 31,
+            24, 27, 27, 27, 27, 27, 31, 0, 0, 0, 0, 0, 0, 27, 8,
+            7, 4, 4, 4, 4, 4, 8, 13, 13, 13, 13, 13, 6, 3, 9],
+         "height":20,
+         "id":1,
+         "name":"grass",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":15,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.11.0",
+ "tileheight":100,
+ "tilesets":[
+        {
+         "columns":6,
+         "firstgid":1,
+         "image":"images\/grass-sheet.png",
+         "imageheight":600,
+         "imagewidth":600,
+         "margin":0,
+         "name":"grass-sheet",
+         "properties":[
+                {
+                 "name":"collides",
+                 "type":"bool",
+                 "value":true
+                }],
+         "spacing":0,
+         "tilecount":36,
+         "tileheight":100,
+         "tiles":[
+                {
+                 "id":15,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":0,
+                             "id":1,
+                             "name":"",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    }, 
+                                    {
+                                     "x":-102,
+                                     "y":98
+                                    }, 
+                                    {
+                                     "x":0,
+                                     "y":100
+                                    }],
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":0,
+                             "x":101,
+                             "y":2
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }, 
+                {
+                 "id":19,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":0,
+                             "id":1,
+                             "name":"",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    }, 
+                                    {
+                                     "x":99,
+                                     "y":98
+                                    }, 
+                                    {
+                                     "x":-5,
+                                     "y":97
+                                    }],
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":0,
+                             "x":2,
+                             "y":2
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":100
+        }],
+ "tilewidth":100,
+ "type":"map",
+ "version":"1.10",
+ "width":15
+}

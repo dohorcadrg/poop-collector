@@ -49,6 +49,10 @@
         color: "purple",
         unlocked: false,
     },
+    {
+        color: "rainbow",
+        unlocked: false,
+    },
     ];
 
 //scenes
@@ -133,6 +137,7 @@ let gameover = new Phaser.Scene('gameover');
         this.load.spritesheet('grass-sheet', 'assets/images/grass-sheet.png', {frameWidth: 100, frameHeight: 100});
         this.load.image('sky1', 'assets/background/background.png');
         this.load.image('sky2', 'assets/background/sky.png');
+        this.load.image('backtile', 'assets/background/bathroomtilebackground.png');
         this.load.image('ground', 'assets/tiles/grass.png');
         this.load.spritesheet('defaultpoop', 'assets/poop/spritesheet.png', { frameWidth: 91, frameHeight: 84 });
         this.load.spritesheet('redpoop', 'assets/poop/spritesheetred.png', { frameWidth: 91, frameHeight: 84 });
@@ -152,6 +157,15 @@ let gameover = new Phaser.Scene('gameover');
         this.load.image('leftArrow', 'assets/images/templeftarrow.png');
         this.load.image('rightArrow', 'assets/images/temprightarrow.png');
         this.load.image('mainlogo', 'assets/images/pclogoidea1.png');
+
+        this.load.image('longstartbutton', 'assets/images/longstartbutton.png');
+        this.load.image('emptyiconbluelong', 'assets/images/emptyiconbluelong.png');
+        this.load.image('emptyicongreenlong', 'assets/images/emptyicongreenlong.png');
+
+        this.load.image('infoicon', 'assets/images/infoicon.png');
+        this.load.image('shopicon', 'assets/images/shopicon.png');
+        this.load.image('closeticon', 'assets/images/closeticon.png');
+        this.load.image('homeicon', 'assets/images/homeicon.png');
     }
 
     splashscreen.create = function(){
@@ -188,12 +202,12 @@ let gameover = new Phaser.Scene('gameover');
     titlescreen.create = function(){
         this.sound.add('uipopsound');
         this.add.image(screenCenterX, screenCenterY - 100, 'mainlogo').setOrigin(0.5);
-        let startButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
-        let creditsButton = this.add.circle(screenCenterX + (screenCenterX - 55), (screenCenterY / 5), 50, 0xffaaaa);
+        let startButton = this.add.image(screenCenterX, screenCenterY + 125, 'longstartbutton').setOrigin(0.5);
+        //let startButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
+        let creditsButton = this.add.image(screenCenterX + screenCenterX - 55, screenCenterY / 10, 'infoicon').setOrigin(0.5);
+        //let creditsButton = this.add.circle(screenCenterX + (screenCenterX - 55), (screenCenterY / 5), 50, 0xffaaaa);
         startButton.setInteractive();
         creditsButton.setInteractive();
-        this.add.text(screenCenterX, screenCenterY + 200, 'Start game', { fontSize: '30px', fill: '#000' }).setOrigin(0.5);
-        this.add.text(screenCenterX + (screenCenterX - 55), screenCenterY / 5, '?', { fontSize: '50px', fill: '#000' }).setOrigin(0.5);
         startButton.on('pointerdown', function (pointer)
         {
             
@@ -207,16 +221,15 @@ let gameover = new Phaser.Scene('gameover');
 
         //show shopping button or closet
         if (totalcoins > 0) {
-        let shoppingButton = this.add.rectangle(100, (screenCenterY / 10), 150, 50, 0xaaffaa);
-        this.add.text(100, screenCenterY / 10, 'Spend Coins', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+            let shoppingButton = this.add.image(55, screenCenterY / 10, 'shopicon').setOrigin(0.5);
+        //let shoppingButton = this.add.rectangle(100, (screenCenterY / 10), 150, 50, 0xaaffaa);
         shoppingButton.setInteractive();
         shoppingButton.on('pointerdown', function (pointer){
                 yesShowShopping = true;
             });
         }
-
-        let closetButton = this.add.rectangle(100, (screenCenterY + screenCenterY - 50), 150, 50, 0xaaffaa);
-        this.add.text(100, (screenCenterY + screenCenterY - 50), 'Change Color', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        let closetButton = this.add.image(125, screenCenterY / 10, 'closeticon').setOrigin(0.5);
+        //let closetButton = this.add.rectangle(100, (screenCenterY + screenCenterY - 50), 150, 50, 0xaaffaa);
         closetButton.setInteractive();
         closetButton.on('pointerdown', function (pointer){
                 yesShowCloset = true;
@@ -253,8 +266,12 @@ let gameover = new Phaser.Scene('gameover');
 //maingame
 
     maingame.create = function(){
-        this.add.image(900, 750, 'sky2');
-        this.add.image(900, 1400, 'sky2');
+        this.add.image(500, 0, 'backtile').setOrigin(0.5);
+        this.add.image(500, 1000, 'backtile').setOrigin(0.5);
+        this.add.image(500, 2000, 'backtile').setOrigin(0.5);
+        this.add.image(1000, 0, 'backtile').setOrigin(0.5);
+        this.add.image(1000, 1000, 'backtile').setOrigin(0.5);
+        this.add.image(1000, 2000, 'backtile').setOrigin(0.5);
             map = this.make.tilemap({key: 'map'});
             var grass = map.addTilesetImage('grass-sheet');
             //grassLayer = map.createDynamicLayer('grass', grass, 0, 0);
@@ -526,13 +543,20 @@ let gameover = new Phaser.Scene('gameover');
         endScore.setText("Your Final Score: " + score + "pc");
         endTotalMoney = this.add.text(screenCenterX, screenCenterY - (screenCenterY / 4), '0', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         endTotalMoney.setText("Total Coins Collected: " + totalcoins + "pc");
-        let continueButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
+    
+
+        let continueButton = this.add.image(screenCenterX, screenCenterY + 125, 'longstartbutton').setOrigin(0.5);
+        //let continueButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
         continueButton.setInteractive();
-        continueText = this.add.text(screenCenterX, screenCenterY + 200, 'Restart Game', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
-        let creditsButton = this.add.circle(screenCenterX + (screenCenterX - 55), (screenCenterY / 5), 50, 0xffaaaa);
-        creditsButton.setInteractive();
-        this.add.text(screenCenterX + (screenCenterX - 55), screenCenterY / 5, '?', { fontSize: '50px', fill: '#000' }).setOrigin(0.5);
         
+        let homeButton = this.add.image(screenCenterX - 100, screenCenterY + 125, 'homeicon').setOrigin(0.5);
+        homeButton.setInteractive();
+        homeButton.on('pointerdown', function (pointer){
+                returntoMenu = true;
+        });
+
+        let creditsButton = this.add.image(screenCenterX + screenCenterX - 55, screenCenterY / 10, 'infoicon').setOrigin(0.5);
+        creditsButton.setInteractive();
 
         continueButton.on('pointerdown', function (pointer)
         {
@@ -544,16 +568,14 @@ let gameover = new Phaser.Scene('gameover');
             NowShowCredits = true;
         });
 
-        let shoppingButton = this.add.rectangle(100, (screenCenterY / 10), 150, 50, 0xaaffaa);
-        this.add.text(100, screenCenterY / 10, 'Spend Coins', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        let shoppingButton = this.add.image(55, screenCenterY / 10, 'shopicon').setOrigin(0.5);
         shoppingButton.setInteractive();
         shoppingButton.on('pointerdown', function (pointer)
         {
 
             yesShowShopping = true;
         });
-        let closetButton = this.add.rectangle(100, (screenCenterY + screenCenterY - 50), 150, 50, 0xaaffaa);
-        this.add.text(100, (screenCenterY + screenCenterY - 50), 'Change Color', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        let closetButton = this.add.image(125, screenCenterY / 10, 'closeticon').setOrigin(0.5);
         closetButton.setInteractive();
         closetButton.on('pointerdown', function (pointer){
                 yesShowCloset = true;
@@ -586,6 +608,11 @@ let gameover = new Phaser.Scene('gameover');
             yesShowCloset = false;
             score = 0;
             this.scene.start("closetscreen");
+        }
+        if (returntoMenu) {
+            returntoMenu = false;
+            this.sound.play("uipopsound");
+            this.scene.start("titlescreen");
         }
     }
 
@@ -633,9 +660,9 @@ let gameover = new Phaser.Scene('gameover');
             
         });
 
-        let returntoMenuButton = this.add.rectangle(screenCenterX, screenCenterY + 200, 200, 100, 0xaaffaa);
+        let returntoMenuButton = this.add.image(screenCenterX, screenCenterY + 150, 'emptyicongreenlong').setOrigin(0.5);
         returntoMenuButton.setInteractive();
-        returntoMenuText = this.add.text(screenCenterX, screenCenterY + 200, 'Return to Menu', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
+        returntoMenuText = this.add.text(screenCenterX, screenCenterY + 150, 'Return to Menu', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
         gameState.buyAgainButton = this.add.rectangle(screenCenterX, 100, 200, 50, 0xaaffaa);
         gameState.buyAgainButton.setInteractive();
         gameState.buyAgainText = this.add.text(screenCenterX, 100, 'Buy Another', { fontSize: '20px', fill: '#000' }).setOrigin(0.5);
@@ -762,15 +789,16 @@ let gameover = new Phaser.Scene('gameover');
                             poopColors[6].unlocked = true;
                         }
                         gameState.pooppic.setTexture("purplepoop",[0]);
-                        gameState.easycapsulemachinetext1.setText("You unlocked Purple (uncommon)" + whichResultNum);
+                        gameState.easycapsulemachinetext1.setText("You unlocked Purple (uncommon)");
                     
                     }
                     
                 }
                 else if (whichResultNum <= 10) {
-                    poopColor = "blue";
-                    gameState.pooppic.setTexture("bluepoop",[0]);
-                    gameState.easycapsulemachinetext1.setText("You unlocked Blue (rare)" + whichResultNum);
+                    poopColor = "default";
+                    gameState.pooppic.setTexture("defaultpoop",[0]);
+                    gameState.easycapsulemachinetext1.setText("You unlocked extremy rare (+100 coins)");
+                    totalcoins = totalcoins + 100;
                 }
             }
     }
@@ -795,7 +823,7 @@ let gameover = new Phaser.Scene('gameover');
         var poopnum = 100;
 
 /*        
-
+Failed Loop Attempt
         for (var i = 0; i < poopColors.length; i++) {
 
 
@@ -867,11 +895,17 @@ let gameover = new Phaser.Scene('gameover');
         gameState.displayedPoop[5] = this.add.image(300, screenCenterY + 100, "unlockedpoop");
     }
 
-    if (poopColors[5].unlocked) {
+    if (poopColors[6].unlocked) {
     gameState.displayedPoop[6] = this.add.image(100, screenCenterY + 200, poopColors[6].color + "poop");
     gameState.displayedPoop[6].setInteractive();
     }else{
         gameState.displayedPoop[6] = this.add.image(100, screenCenterY + 200, "unlockedpoop");
+    }
+    if (poopColors[7].unlocked) {
+    gameState.displayedPoop[7] = this.add.image(200, screenCenterY + 200, poopColors[7].color + "poop");
+    gameState.displayedPoop[7].setInteractive();
+    }else{
+        gameState.displayedPoop[7] = this.add.image(200, screenCenterY + 200, "unlockedpoop");
     }
                     
                     
@@ -992,10 +1026,15 @@ let gameover = new Phaser.Scene('gameover');
         this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 20, 'TinyWorlds at Open Game Art', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 40, 'Coin And Bounce SX By:', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 60, 'NoiseForFun.com', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
-        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 80, 'Tile Set and Background by:', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 80, 'GUI Buttons by:', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
         this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 100, 'Bayat games platformer asset set', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
-        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 120, 'Powered by Phaser 3', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
-        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 140, 'Developed by Glory Legaspi', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 120, 'Gamefx6 Sx by: ', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 140, 'danlucaz on freesound.org', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 160, 'UI pop SX by: ', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 180, 'unfa on freesound.org', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 200, 'Powered by Phaser 3', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        this.add.text(screenCenterX, screenCenterY - (screenCenterY/2) + 220, 'Developed by Glory Legaspi', { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5);
+        
         this.input.on('pointerdown', function (pointer)
         {
             returntoMenu = true;
